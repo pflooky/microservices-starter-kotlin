@@ -7,6 +7,7 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 import reactor.core.publisher.Mono
+import java.lang.RuntimeException
 
 @Service
 class DefaultLdapService(private val ldapConnection: LdapConnection, private val ldapConfig: LdapConfig) : LdapService {
@@ -16,15 +17,24 @@ class DefaultLdapService(private val ldapConnection: LdapConnection, private val
     }
 
     override fun checkMembers(group: String): Mono<List<String>> {
-        val searchResult = ldapConnection.search(ldapConfig.baseDn, "(objectclass=*)", SearchScope.ONELEVEL).toList()
+        val searchResult = ldapConnection.search(ldapConfig.baseDn, "(cn=$group)", SearchScope.ONELEVEL).toList()
         LOGGER.info("search for members in group: {}, number of members = {}", group, searchResult.size)
         val members = searchResult.map{entry ->
+            println(entry)
             entry.get("cn").string
         }
         return Mono.just(members)
     }
 
-    override fun getAttribute(): Mono<String> {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    override fun getAttribute(user: String, attribute: String): Mono<String> {
+        val searchResult = ldapConnection.search(ldapConfig.baseDn, "(cn=$user)", SearchScope.ONELEVEL).toList() //sAMAccountName
+        LOGGER.info("search for attribute ({}) for user: {}", attribute, user)
+        return if (searchResult.isEmpty()) {
+            LOGGER.error("did not find entry for user: {}", user)
+            Mono.error(RuntimeException("failed to find entry for user $user"))
+        } else {
+            val userAttribute = searchResult.first().get(attribute).string
+            Mono.just(userAttribute)
+        }
     }
 }

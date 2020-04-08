@@ -84,3 +84,7 @@ ldap:
   ssl: false
   timeout: 0
   enabled: ${flags.use.ldap}
+
+jwt:
+  secretKey: "abc123"
+  ttlMillis: 10000

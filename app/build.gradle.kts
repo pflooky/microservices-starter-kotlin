@@ -55,6 +55,9 @@ dependencies {
     implementation("org.springframework.data:spring-data-r2dbc:1.0.0.RELEASE")
     implementation("io.github.skhatri:mounted-secrets-client:0.2.3")
     implementation("org.apache.directory.api:api-all:2.0.1")
+    implementation("io.jsonwebtoken:jjwt:0.9.1")
+    implementation("javax.xml.bind:jaxb-api:2.3.1")
+
     testImplementation("org.springframework.boot:spring-boot-starter-test") {
         exclude(module = "junit")
         exclude(module = "mockito-core")

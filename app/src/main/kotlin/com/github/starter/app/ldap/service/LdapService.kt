@@ -5,5 +5,5 @@ import reactor.core.publisher.Mono
 interface LdapService {
     fun checkMembers(group: String): Mono<List<String>>
 
-    fun getAttribute(): Mono<String>
+    fun getAttribute(user: String, attribute: String): Mono<String>
 }

@@ -4,10 +4,9 @@ import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.annotation.JsonProperty
 
-class MessageItem @JsonCreator constructor(@JsonProperty("code") val code: String, @JsonProperty("message") val message: String,
-                                           @JsonProperty("details")
-                                           @JsonInclude(JsonInclude.Include.NON_EMPTY)
-                                           val details: Map<String, Any>) {
+class MessageItem @JsonCreator constructor(@JsonProperty("code") val code: String,
+                                           @JsonProperty("message") val message: String,
+                                           @JsonProperty("details") @JsonInclude(JsonInclude.Include.NON_EMPTY) val details: Map<String, Any>) {
 
     @JsonCreator
     constructor(code: String, message: String) : this(code, message, mapOf())

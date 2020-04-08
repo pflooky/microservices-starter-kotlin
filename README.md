@@ -15,7 +15,8 @@ Microservices Starter Project
 ### Running locally
 1. Using docker, `docker-compose up`
 1. Run Application.kt
-1. `https://localhost/ldap/search/example`
+1. https://localhost:8080/ldap/members/admin
+1. https://localhost:8080/ldap/user/admin/description
 
 ### logging
 log4j2
