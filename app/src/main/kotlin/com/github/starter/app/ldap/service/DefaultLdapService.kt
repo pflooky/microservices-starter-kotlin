@@ -5,11 +5,13 @@ import org.apache.directory.api.ldap.model.message.SearchScope
 import org.apache.directory.ldap.client.api.LdapConnection
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
 import org.springframework.stereotype.Service
 import reactor.core.publisher.Mono
 import java.lang.RuntimeException
 
 @Service
+@ConditionalOnProperty(name = ["ldap.enabled"], havingValue = "true")
 class DefaultLdapService(private val ldapConnection: LdapConnection, private val ldapConfig: LdapConfig) : LdapService {
 
     companion object {

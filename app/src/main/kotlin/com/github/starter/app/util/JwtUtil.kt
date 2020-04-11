@@ -1,9 +1,6 @@
 package com.github.starter.app.util
 
-import com.fasterxml.jackson.databind.ObjectMapper
 import com.github.starter.app.config.JwtConfig
-import com.github.starter.app.ldap.service.DefaultLdapService
-import com.github.starter.core.container.Container
 import io.jsonwebtoken.JwtBuilder
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.SignatureAlgorithm
@@ -18,23 +15,20 @@ import javax.crypto.spec.SecretKeySpec
 class JwtUtil(private val jwtConfig: JwtConfig) {
 
     companion object {
-        val objectMapper = ObjectMapper()
         private val LOGGER: Logger = LoggerFactory.getLogger(JwtUtil::class.java)
+        private val signatureAlgorithm: SignatureAlgorithm = SignatureAlgorithm.HS256
     }
 
-    fun createJwt(subject: Any): String {
-        val signatureAlgorithm: SignatureAlgorithm = SignatureAlgorithm.HS256
+    fun createJwt(subject: String): String {
         val nowMillis = System.currentTimeMillis()
         val now = Date(nowMillis)
 
         val apiKeySecretBytes: ByteArray = jwtConfig.secretKey.toByteArray()
         val signingKey: Key = SecretKeySpec(apiKeySecretBytes, signatureAlgorithm.jcaName)
 
-        val subjectAsString = objectMapper.writeValueAsString(Container(subject))
-
         val builder: JwtBuilder = Jwts.builder()
                 .setIssuedAt(now)
-                .setSubject(subjectAsString)
+                .setSubject(subject)
                 .setIssuer(jwtConfig.issuer)
                 .signWith(signatureAlgorithm, signingKey)
 

@@ -2,6 +2,7 @@ package com.github.starter.app.ldap.endpoints
 
 import com.github.starter.app.ldap.service.LdapService
 import com.github.starter.core.container.Container
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestMapping
@@ -10,6 +11,7 @@ import reactor.core.publisher.Mono
 
 @RestController
 @RequestMapping("/ldap")
+@ConditionalOnProperty(name = ["ldap.enabled"], havingValue = "true")
 class LdapEndpoints(private val ldapService: LdapService) {
 
     @GetMapping("/members/{group}")

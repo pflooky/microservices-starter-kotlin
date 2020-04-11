@@ -17,6 +17,7 @@ Microservices Starter Project
 1. Run Application.kt
 1. https://localhost:8080/ldap/members/admin
 1. https://localhost:8080/ldap/user/admin/description
+1. `curl -k -H "Content-Type: application/json" -X POST https://localhost:8080/jwt/create -d "hello world"`
 
 ### logging
 log4j2
