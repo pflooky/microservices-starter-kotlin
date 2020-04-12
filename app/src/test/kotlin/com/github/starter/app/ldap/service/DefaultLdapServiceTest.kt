@@ -1,6 +1,7 @@
 package com.github.starter.app.ldap.service
 
 import com.github.starter.app.config.LdapConfig
+import com.github.starter.app.ldap.exception.UnknownUserException
 import org.apache.directory.api.ldap.model.cursor.EntryCursor
 import org.apache.directory.api.ldap.model.entry.DefaultEntry
 import org.apache.directory.api.ldap.model.entry.Entry
@@ -11,9 +12,11 @@ import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.DisplayName
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.Mockito
 import org.springframework.test.context.junit.jupiter.SpringExtension
+import java.lang.RuntimeException
 
 @DisplayName("Ldap Service Test")
 @ExtendWith(SpringExtension::class)
@@ -63,5 +66,17 @@ internal class DefaultLdapServiceTest {
             assertTrue(it.isNotEmpty())
             assertEquals("The admin", it)
         }.dispose()
+    }
+
+    @Test
+    fun `try get attribute of a user that doesn't exist`() {
+        //when
+        Mockito.`when`(entryCursor.iterator())
+                .thenReturn(mutableListOf<Entry>().iterator())
+
+        //then
+        assertThrows<UnknownUserException> {
+            ldapService.getAttribute("peter", "description").block()
+        }
     }
 }

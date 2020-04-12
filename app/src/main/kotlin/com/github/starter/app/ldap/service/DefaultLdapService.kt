@@ -1,6 +1,7 @@
 package com.github.starter.app.ldap.service
 
 import com.github.starter.app.config.LdapConfig
+import com.github.starter.app.ldap.exception.UnknownUserException
 import org.apache.directory.api.ldap.model.message.SearchScope
 import org.apache.directory.ldap.client.api.LdapConnection
 import org.slf4j.Logger
@@ -33,7 +34,7 @@ class DefaultLdapService(private val ldapConnection: LdapConnection, private val
         LOGGER.info("search for attribute ({}) for user: {}", attribute, user)
         return if (searchResult.isEmpty()) {
             LOGGER.error("did not find entry for user: {}", user)
-            Mono.error(RuntimeException("failed to find entry for user $user"))
+            Mono.error(UnknownUserException("failed to find entry for user $user"))
         } else {
             val userAttribute = searchResult.first().get(attribute).string
             Mono.just(userAttribute)
