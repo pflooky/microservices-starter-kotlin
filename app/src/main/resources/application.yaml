@@ -47,34 +47,6 @@ secrets:
       entries-location: "others.properties"
       ignore-resource-failure: true
 
-datasource.jdbc:
-  enabled: ${flags.use.jdbc}
-  ref:
-    - name: default-jdbc-client
-      driver: h2
-      username: sa
-      password: "secret::vault::h2_password:-"
-      protocol: mem
-      database: "testdb"
-      enabled: true
-      load: "h2"
-
-    - name: h2-1
-      driver: h2
-      username: sa
-      password: "secret::vault::h2_password:-"
-      protocol: mem
-      database: "testdb2"
-      enabled: true
-
-    - name: postgresql-1
-      driver: postgresql
-      username: todoservice
-      password: "secret::vault::postgres_password:-password"
-      host: localhost
-      port: 5432
-      enabled: false
-
 ldap:
   host: "192.168.99.100"
   port: 389 #389 without ssl, 636 with ssl
