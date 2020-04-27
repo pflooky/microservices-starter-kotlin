@@ -24,13 +24,13 @@ class DefaultLdapService(private val ldapConnection: LdapConnection, private val
         LOGGER.info("search for members in group: {}, number of members = {}", group, searchResult.size)
         val members = searchResult.map{entry ->
             println(entry)
-            entry.get("cn").string
+            entry.get("sAMAccountName").string
         }
         return Mono.just(members)
     }
 
     override fun getAttribute(user: String, attribute: String): Mono<String> {
-        val searchResult = ldapConnection.search(ldapConfig.baseDn, "(cn=$user)", SearchScope.ONELEVEL).toList() //sAMAccountName
+        val searchResult = ldapConnection.search(ldapConfig.baseDn, "(sAMAccountName=$user)", SearchScope.ONELEVEL).toList() //sAMAccountName
         LOGGER.info("search for attribute ({}) for user: {}", attribute, user)
         return if (searchResult.isEmpty()) {
             LOGGER.error("did not find entry for user: {}", user)

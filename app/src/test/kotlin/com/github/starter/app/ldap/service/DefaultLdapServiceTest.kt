@@ -38,7 +38,10 @@ internal class DefaultLdapServiceTest {
     @BeforeEach
     private fun createLdapBase() {
         Mockito.`when`(entryCursor.iterator())
-                .thenReturn(mutableListOf<Entry>(DefaultEntry(baseDn, "cn:admin", "sAMAccountName:admin", "description:The admin")).iterator())
+                .thenReturn(mutableListOf<Entry>(
+                        DefaultEntry(baseDn, "cn:admin", "sAMAccountName:admin", "description:The admin"),
+                        DefaultEntry(baseDn, "cn:admin", "sAMAccountName:fred", "description:The admin's best friend")
+                ).iterator())
         Mockito.`when`(ldapConnection.search(Mockito.matches(baseDn), Mockito.anyString(), Mockito.any(SearchScope::class.java)))
                 .thenReturn(entryCursor)
     }
@@ -50,9 +53,8 @@ internal class DefaultLdapServiceTest {
 
         //then
         result.subscribe {
-            assertEquals(1, it.size)
-            val memberName = it.first()
-            assertEquals("admin", memberName)
+            assertEquals(2, it.size)
+            assertEquals(it, listOf("admin", "fred"))
         }.dispose()
     }
 
