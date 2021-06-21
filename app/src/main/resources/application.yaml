@@ -5,7 +5,7 @@ flags:
     ssl: true
     http2: true
     jdbc: true
-    ldap: true
+    ldap: false
 
 server.ssl:
   key-store: classpath:server.p12
